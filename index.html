@@ -1,6 +1,21 @@
 <!doctype html>
 <head><title>benstox.github.io</title></head>
 <body>
+  <div id="main">
     <p>Welcome.</p>
+    <p id="appears-1" style="display: None">Hello ...</p>
+    <p id="appears-2" style="display: None">... hello ...</p>
+    <p id="appears-3" style="display: None">... hello!</p>
+  </div>
+  <script src="external/jquery-3.2.1.min.js"></script>
+  <script>
+    $(document).ready(
+        function() {
+          $("#appears-1").fadeIn("slow");
+          setTimeout(function() {$("#appears-2").fadeIn("slow")}, 1000);
+          setTimeout(function() {$("#appears-3").fadeIn("slow")}, 2000);
+        }
+    );
+  </script>
 </body>
 
