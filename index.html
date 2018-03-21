@@ -1,28 +1,23 @@
 <!doctype html>
 <head>
   <title>benstox.github.io</title>
-  <link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="static/css/main.css"/>
+  <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css"/>
 </head>
 <body>
   <div id="main">
-    <p>Welcome.</p>
-    <p id="appears-1" style="display: None">Hello ...</p>
-    <p id="appears-2" style="display: None">... hello ...</p>
-    <p id="appears-3" style="display: None">... hello!</p>
+    <ul>
+      <li><a href="markov.html">Markovian chant</a></li>
+    </ul>
   </div>
-  <ul>
-    <li><a href="markov.html">Markovian chant</a></li>
-  </ul>
   <script src="external/jquery-3.2.1.min.js"></script>
   <script>
     $(document).ready(
         function() {
-          $("#appears-1").fadeIn("slow");
-          setTimeout(function() {$("#appears-2").fadeIn("slow")}, 1000);
-          setTimeout(function() {$("#appears-3").fadeIn("slow")}, 2000);
+          // $("#appears-1").fadeIn("slow");
+          // setTimeout(function() {$("#appears-2").fadeIn("slow")}, 1000);
+          // setTimeout(function() {$("#appears-3").fadeIn("slow")}, 2000);
         }
     );
   </script>
 </body>
-
