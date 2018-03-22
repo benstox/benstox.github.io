@@ -85,8 +85,7 @@ var clickButton = function(e) {
         });
         stop_music();
         // then play this button
-        button.data("playing", "on");
-        button.text(buttonText + " (playing)");
+        turnButtonOn(button);
         var mode_selected = button.data("mode");
         var markov_order = button.data("order");
         console.log("Mode: " + mode_selected + "; Order: " + markov_order);
