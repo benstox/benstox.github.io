@@ -19,10 +19,8 @@ var note;
 var velocity;
 
 var melody_timeouts = [];
-
-// set up the instrument
-var instrument = "celesta-mp3";
-var notes = _.mapValues({
+var melody_speed = 1.1;
+var NOTES = {
     z: {name: "G3"},
     a: {name: "A3"},
     B: {name: "Bb3"},
@@ -46,53 +44,93 @@ var notes = _.mapValues({
     m: {name: "F5"},
     n: {name: "G5"},
     o: {name: "A5"},
-    p: {name: "B5"}}, function(v) {
-        return(_.set(v, "source", "static/audio/" + instrument + "/" + v.name + ".mp3"));
-    }
-);
-var melody_speed = 1.1;
+    p: {name: "B5"},
+};
 
 // user interaction --------------------------------------------------------------
 var turnButtonOff = function(button) {
-    var buttonText = button.text();
-    button.data("playing", "off");
-    button.text(buttonText.substring(0, 7));
+    button.data("pressed", "up");
+    button.text("&#9658;"); // play symbol (triangle)
     button.removeClass("btn-light");
     button.addClass("btn-dark");
 };
 
 var turnButtonOn = function(button) {
-    var buttonText = button.text();
-    button.data("playing", "on");
-    button.text(buttonText + " (playing)");
+    button.data("pressed", "down");
+    button.text("&#9608;"); // stop symbol (square)
     button.removeClass("btn-dark");
     button.addClass("btn-light");
 };
 
-var clickButton = function(e) {
+var getSetting = function(settingType) {
+    // get settings, e.g. instrument or Markov order
+    var alreadyPressed = _.filter($("#" + settingType + " button"), function(x) {if ($.data(x)["pressed"] == "down") {return(x)}});
+    if (alreadyPressed.length != 0) {
+        var settingButton = $(alreadyPressed[0]);
+    } else {
+        var settingButton = $($("#" + settingType + " button")[0])
+        turnbuttonOn(settingButton);
+    };
+    var setting = settingButton.data(settingType);
+    return(setting);
+};
+
+var setUpInstrument = function(instrument) {
+    var notes = _.mapValues(
+        NOTES,
+        function(v) {
+            return(_.set(v, "source", "static/audio/" + instrument + "/" + v.name + ".mp3"));
+        }
+    );
+};
+
+
+var clickPlayButton = function(e) {
     var button = $(this);
-    var playing = button.data("playing");
+    var pressed = button.data("pressed");
     var buttonText = button.text();
-    if (playing == "on") {
+    if (pressed == "down") {
         turnButtonOff(button);
         stop_music();
-    } else if (playing == "off") {
+    } else if (pressed == "up") {
         // first turn off the ones already on
-        var already_on = _.filter($("button.play-button"), function(x) {if ($.data(x)["playing"] == "on") {return(x)}});
-        _.forEach(already_on, function(playingButton) {
+        var alreadyPressed = _.filter($("button.play-button"), function(x) {if ($.data(x)["pressed"] == "down") {return(x)}});
+        _.forEach(alreadyPressed, function(playingButton) {
             playingButton = $(playingButton);
             turnButtonOff(playingButton);
         });
         stop_music();
         // then play this button
         turnButtonOn(button);
+        var instrument = getSetting("instrument");
+        setUpInstrument(instrument);
         var mode_selected = button.data("mode");
-        var markov_order = button.data("order");
+        var markov_order = getSetting("order");
         console.log("Mode: " + mode_selected + "; Order: " + markov_order);
         var processed_melodies = load_melody_data(MODES[mode_selected], markov_order);
         play_markov_melody(processed_melodies);
     } else {
-        alert("The button had a playing state that was neither on nor off!!");
+        alert("The button had a playing state that was neither down nor up!!");
+    };
+};
+
+var clickRadioButton = function(settingType) {
+    // click a settings radio button, e.g. for an instrument or Markov order
+    var button = $(this);
+    var pressed = button.data("pressed");
+    if (pressed == "down") {
+        turnButtonOff(button);
+    } else if (pressed == "up") {
+        // first turn off the ones already on
+        var alreadyPressed = _.filter($("#" + settingType + " button"), function(x) {if ($.data(x)["pressed"] == "down") {return(x)}});
+        _.forEach(alreadyPressed, function(pressedButton) {
+            pressedButton = $(pressedButton);
+            turnButtonOff(pressedButton);
+        });
+        // then turn this one on
+        turnButtonOn(button);
+    } else {
+        alert("The button had a state that was neither down nor up!!");
     };
 };
 
@@ -333,5 +371,11 @@ $(document).ready(function() {
     // prepare audio files
     _.forEach(notes, addAudioProperties);
 
-    $("button.play-button").click(clickButton);
+    $("button.play-button").click(clickPlayButton);
+    $("#instrument button").click(
+        function() {clickRadioButton("#instrument")}
+    );
+    $("#markov-order button").click(
+        function() {clickRadioButton("#markov-order")}
+    );
 });
