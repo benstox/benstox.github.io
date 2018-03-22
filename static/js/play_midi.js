@@ -63,7 +63,7 @@ var clickButton = function(e) {
         stop_music();
     } else if (playing == "off") {
         // first turn off the ones already on
-        var already_on = _.filter($("div.btn"), function(x) {if ($.data(x)["playing"] == "on") {return(x)}});
+        var already_on = _.filter($("button.play-button"), function(x) {if ($.data(x)["playing"] == "on") {return(x)}});
         _.forEach(already_on, function(playing_button) {
             playing_button = $(playing_button);
             var playingButtonText = playing_button.text();
@@ -349,5 +349,5 @@ $(document).ready(function() {
     // prepare audio files
     _.forEach(notes, addAudioProperties);
 
-    $("div.btn").click(clickButton);
+    $("button.play-button").click(clickButton);
 });
