@@ -273,7 +273,7 @@ var play_markov_melody = function(processed_melodies) {
             // melody over
             // recur the whole play_markov_melody thing
             melody_timeouts.push(setTimeout(
-                function() {play_markov_melody{processed_melodies};},
+                function() {play_markov_melody(processed_melodies);},
                 2000 * melody_speed
             ));
         };
