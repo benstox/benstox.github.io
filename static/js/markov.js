@@ -5,8 +5,12 @@ var load_melody_data = function(data, order) {
     // Yields initials, full chains and finals.
     var initials = _.map(
         _.values(data),
-        function(gabc_melody) {return(gabc_melody.substring(0, order));
-    });
+        function(gabc_melody) {
+            return(
+                gabc_melody.substring(0, order)
+            );
+        }
+    );
 
     var chains = _.reduce(
         _.map(_.values(data), function(gabc_melody) {
@@ -50,18 +54,21 @@ var load_melody_data = function(data, order) {
     );
 
     return({
+        order: order,
         initials: initials,
         chains: chains,
         finals: finals,
     });
 };
 
-var generate_markov = function(data, order, min_length) {
+var generate_markov = function(data, min_length) {
+    var order = data["order"];
     min_length = min_length || 30;
     if (data["initials"] && data["chains"] && data["finals"]) {
         var processed = data;
     } else {
-        var processed = load_melody_data(data, order);
+        console.log("generate_markov: data unprocessed, loading with Markov order 4!")
+        var processed = load_melody_data(data, 4);
     };
     var s = randChoice(processed.initials);
     while (s.length < min_length || !(_.some(processed.finals, function(final) {return(_.endsWith(s, final));}))) {

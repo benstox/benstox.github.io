@@ -77,7 +77,8 @@ var clickButton = function(e) {
         var mode_selected = button.data("mode");
         var markov_order = button.data("order");
         console.log("Mode: " + mode_selected + "; Order: " + markov_order);
-        play_markov_melody(mode_selected, markov_order);
+        var processed_melodies = load_melody_data(MODES[mode_selected], markov_order);
+        play_markov_melody(processed_melodies);
     } else {
         alert("The button had a playing state that was neither on nor off!!");
     };
@@ -263,10 +264,10 @@ var addAudioProperties = function(object) {
     };
 };
 
-var play_markov_melody = function(mode_selected, markov_order) {
+var play_markov_melody = function(processed_melodies) {
     // get a Markov melody!
-    var processed_melodies = load_melody_data(MODES[mode_selected], markov_order);
-    var score = generate_markov(processed_melodies, markov_order);
+    
+    var score = generate_markov(processed_melodies);
     // $("#print-melody").text(score);
 
     // turn the Markov score into a list of notes and durations
