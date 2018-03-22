@@ -53,22 +53,35 @@ var notes = _.mapValues({
 var melody_speed = 1.1;
 
 // user interaction --------------------------------------------------------------
+var turnButtonOff = function(button) {
+    var buttonText = button.text();
+    button.data("playing", "off");
+    button.text(buttonText.substring(0, 7));
+    button.removeClass("btn-light");
+    button.addClass("btn-dark");
+};
+
+var turnButtonOn = function(button) {
+    var buttonText = button.text();
+    button.data("playing", "on");
+    button.text(buttonText + " (playing)");
+    button.removeClass("btn-dark");
+    button.addClass("btn-light");
+};
+
 var clickButton = function(e) {
     var button = $(this);
     var playing = button.data("playing");
     var buttonText = button.text();
     if (playing == "on") {
-        button.data("playing", "off");
-        button.text(buttonText.substring(0, 7));
+        turnButtonOff(button);
         stop_music();
     } else if (playing == "off") {
         // first turn off the ones already on
         var already_on = _.filter($("button.play-button"), function(x) {if ($.data(x)["playing"] == "on") {return(x)}});
-        _.forEach(already_on, function(playing_button) {
-            playing_button = $(playing_button);
-            var playingButtonText = playing_button.text();
-            playing_button.data("playing", "off");
-            playing_button.text(playingButtonText.substring(0, 7));
+        _.forEach(already_on, function(playingButton) {
+            playingButton = $(playingButton);
+            turnButtonOff(playingButton);
         });
         stop_music();
         // then play this button
