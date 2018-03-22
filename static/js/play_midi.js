@@ -82,6 +82,7 @@ var setUpInstrument = function(instrument) {
             return(_.set(v, "source", "static/audio/" + instrument + "/" + v.name + ".mp3"));
         }
     );
+    return(notes);
 };
 
 
@@ -103,12 +104,12 @@ var clickPlayButton = function(e) {
         // then play this button
         turnButtonOn(button);
         var instrument = getSetting("instrument");
-        setUpInstrument(instrument);
+        var notes = setUpInstrument(instrument);
         var mode_selected = button.data("mode");
         var markov_order = getSetting("order");
         console.log("Mode: " + mode_selected + "; Order: " + markov_order);
         var processed_melodies = load_melody_data(MODES[mode_selected], markov_order);
-        play_markov_melody(processed_melodies);
+        play_markov_melody(notes, processed_melodies);
     } else {
         alert("The button had a playing state that was neither down nor up!!");
     };
@@ -286,7 +287,7 @@ var addAudioProperties = function(object) {
     };
 };
 
-var play_markov_melody = function(processed_melodies) {
+var play_markov_melody = function(notes, processed_melodies) {
     // get a Markov melody!
     
     var score = generate_markov(processed_melodies);
@@ -323,7 +324,7 @@ var play_markov_melody = function(processed_melodies) {
             // melody over
             // recur the whole play_markov_melody thing
             melody_timeouts.push(setTimeout(
-                function() {play_markov_melody(processed_melodies);},
+                function() {play_markov_melody(notes, processed_melodies);},
                 2000 * melody_speed
             ));
         };
