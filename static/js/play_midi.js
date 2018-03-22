@@ -51,8 +51,6 @@ var notes = _.mapValues({
     }
 );
 var melody_speed = 1.1;
-var markov_order = 4;
-
 var processed_melodies = load_melody_data(MODES[randInt(1, 9)], markov_order);
 
 // user interaction --------------------------------------------------------------
@@ -67,14 +65,12 @@ var clickButton = function(e) {
     } else if (playing == "off") {
         button.data("playing", "on");
         button.text(buttonText + " (playing)");
-        play_markov_melody();
+        var mode_selected = button.data("mode");
+        var markov_order = button.data("order");
+        play_markov_melody(mode_selected, markov_order);
     } else {
-        alert("The button had a playing state that was neither 'on' nor 'off'!!");
+        alert("The button had a playing state that was neither on nor off!!");
     };
-};
-
-var clickStopOff = function(e) {
-    
 };
 
 var keyController = function(e) {
@@ -257,13 +253,14 @@ var addAudioProperties = function(object) {
     };
 };
 
-var play_markov_melody = function() {
+var play_markov_melody = function(mode_selected, markov_order) {
     // get a Markov melody!
-    score = generate_markov(processed_melodies, markov_order);
-    $("#print-melody").text(score);
+    var processed_melodies = load_melody_data(MODES[mode_selected], markov_order);
+    var score = generate_markov(processed_melodies, markov_order);
+    // $("#print-melody").text(score);
 
     // turn the Markov score into a list of notes and durations
-    melody = process_markov_score(score);
+    var melody = process_markov_score(score);
 
     // work out the temporal position of each note in the melody
     // based on cummulative durations

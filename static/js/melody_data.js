@@ -1516,7 +1516,7 @@ var MODES = {
       "zachaee_festinans_2526": "fh_gg_hjihghggf.fhjjkk_ljih_kjihghghgfefhji_hgg.fhghjihgghggf.fhjijihgh_ihghefgg.ff_gg.hi_jj_kkjh_ji_jhgfhjhgg_hgfefgg_hihg.g.",
       "zelus_domus_tuae_2297": "jjjjj_kjijkjhjig.fhjig_hfhjkijh.hghihgfgg."
     },
-    "p": {
+    "peregrinus": {
       "angeli_domini_2074": "dcdffgg.hgh_hgfed_fghg.g.fhhg.g.",
       "martyres_domini_2051": "dcdffgg.hgh_hgfed_fghg.g.",
       "psalm_tone": "hIhhh_hhgIhgf.gggg_gggdffe.d.",
