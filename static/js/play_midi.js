@@ -69,7 +69,7 @@ var getSetting = function(settingType) {
         var settingButton = $(alreadyPressed[0]);
     } else {
         var settingButton = $($("#" + settingType + " button")[0])
-        turnbuttonOn(settingButton);
+        turnButtonOn(settingButton);
     };
     var setting = settingButton.data(settingType);
     return(setting);
