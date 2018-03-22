@@ -84,34 +84,6 @@ var clickButton = function(e) {
     };
 };
 
-var keyController = function(e) {
-    if(e.type == "keydown") {
-        switch(e.keyCode) {
-            case 81:
-                $("#play-button").addClass('active');
-                play_markov_melody();
-                break;
-            case 87:
-                $("#stop-button").addClass('active');
-                stop_music();
-                break;  
-            default:
-                //console.log(e);
-        };
-    } else if(e.type == "keyup") {
-        switch(e.keyCode) {
-            case 81:
-                $("#play-button").removeClass('active');
-                break;
-            case 87:
-                $("#stop-button").removeClass('active');
-                break;
-            default:
-                //console.log(e.keyCode);
-        };
-    };
-};
-
 // midi functions --------------------------------------------------------------
 var onMIDISuccess = function(midiAccess) {
     midi = midiAccess;
@@ -301,7 +273,7 @@ var play_markov_melody = function(processed_melodies) {
             // melody over
             // recur the whole play_markov_melody thing
             melody_timeouts.push(setTimeout(
-                play_markov_melody,
+                function() {play_markov_melody{processed_melodies};},
                 2000 * melody_speed
             ));
         };
