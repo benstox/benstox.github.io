@@ -51,7 +51,6 @@ var notes = _.mapValues({
     }
 );
 var melody_speed = 1.1;
-var processed_melodies = load_melody_data(MODES[randInt(1, 9)], markov_order);
 
 // user interaction --------------------------------------------------------------
 var clickButton = function(e) {
