@@ -76,17 +76,15 @@ var getSetting = function(settingType) {
 };
 
 var setUpInstrument = function(instrument) {
-    var notes = _.mapValues(
+    window.notes = _.mapValues(
         NOTES,
         function(v) {
             return(_.set(v, "source", "static/audio/" + instrument + "/" + v.name + ".mp3"));
         }
     );
     // prepare audio files
-    _.forEach(notes, addAudioProperties);
-    return(notes);
+    _.forEach(window.notes, addAudioProperties);
 };
-
 
 var clickPlayButton = function(e) {
     var button = $(this);
@@ -106,12 +104,12 @@ var clickPlayButton = function(e) {
         // then play this button
         turnButtonOn(button);
         var instrument = getSetting("instrument");
-        var notes = setUpInstrument(instrument);
+        setUpInstrument(instrument);
         var mode_selected = button.data("mode");
         var markov_order = getSetting("order");
         console.log("Mode: " + mode_selected + "; Order: " + markov_order);
         var processed_melodies = load_melody_data(MODES[mode_selected], markov_order);
-        play_markov_melody(notes, processed_melodies);
+        play_markov_melody(processed_melodies);
     } else {
         alert("The button had a playing state that was neither down nor up!!");
     };
@@ -289,7 +287,7 @@ var addAudioProperties = function(object) {
     };
 };
 
-var play_markov_melody = function(notes, processed_melodies) {
+var play_markov_melody = function(processed_melodies) {
     // get a Markov melody!
     
     var score = generate_markov(processed_melodies);
@@ -315,7 +313,7 @@ var play_markov_melody = function(notes, processed_melodies) {
             // get the current note from the melody
             var note_to_play = melody[i];
             // play the note!
-            notes[note_to_play.shorthand].play(note_to_play.velocity);
+            window.notes[note_to_play.shorthand].play(note_to_play.velocity);
             // recur, compensating for lag
             var diff = (new Date().getTime() - start_time) -  note_to_play.position;
             melody_timeouts.push(setTimeout(
@@ -326,7 +324,7 @@ var play_markov_melody = function(notes, processed_melodies) {
             // melody over
             // recur the whole play_markov_melody thing
             melody_timeouts.push(setTimeout(
-                function() {play_markov_melody(notes, processed_melodies);},
+                function() {play_markov_melody(processed_melodies);},
                 2000 * melody_speed
             ));
         };
@@ -336,7 +334,7 @@ var play_markov_melody = function(notes, processed_melodies) {
 };
 
 var stop_music = function() {
-    _.forEach(notes, function(note) {
+    _.forEach(window.notes, function(note) {
         note.stop();
     });
     _.forEach(melody_timeouts, function(timeout_id) {
