@@ -47,7 +47,7 @@ var notes = _.mapValues({
     n: {name: "G5"},
     o: {name: "A5"},
     p: {name: "B5"}}, function(v) {
-        return(_.set(v, "source", "midi/audio/" + instrument + "/" + v.name + ".mp3"));
+        return(_.set(v, "source", "static/audio/" + instrument + "/" + v.name + ".mp3"));
     }
 );
 var melody_speed = 1.1;
