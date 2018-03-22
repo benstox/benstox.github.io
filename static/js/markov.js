@@ -5,14 +5,14 @@ var load_melody_data = function(data, order) {
     // Yields initials, full chains and finals.
     var initials = _.map(
         _.values(data),
-        function(melody) {return(melody.substring(0, order));
+        function(gabc_melody) {return(gabc_melody.substring(0, order));
     });
 
     var chains = _.reduce(
-        _.map(_.values(data), function(melody) {
+        _.map(_.values(data), function(gabc_melody) {
             return(
                 _.reduce(
-                    _.split(melody, ""),
+                    _.split(gabc_melody, ""),
                     function(acc, value, index, coll) {
                         if (index < coll.length - order) {
                             var key = _.join(coll.slice(0 + index, order + index), "");
@@ -43,7 +43,9 @@ var load_melody_data = function(data, order) {
     var finals = _.uniq(
         _.map(
             _.values(data),
-            function(melody) {return(melody.substring(melody.length - order));}
+            function(gabc_melody) {
+                return(gabc_melody.substring(gabc_melody.length - order));
+            }
         )
     );
 
