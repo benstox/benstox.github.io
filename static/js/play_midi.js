@@ -63,10 +63,20 @@ var clickButton = function(e) {
         button.text(buttonText.substring(0, 7));
         stop_music();
     } else if (playing == "off") {
+        // first turn off the ones already on
+        var already_on = _.filter($("div.btn"), function(x) {if ($.data(x)["playing"] == "on") {return(x)}});
+        _.forEach(already_on, function(playing_button) {
+            var playingButtonText = playing_button.text();
+            playing_button.data("playing", "off");
+            playing_button.text(playingButtonText.substring(0, 7));
+        });
+        stop_music();
+        // then play this button
         button.data("playing", "on");
         button.text(buttonText + " (playing)");
         var mode_selected = button.data("mode");
         var markov_order = button.data("order");
+        console.log("Mode: " + mode_selected + "; Order: " + markov_order);
         play_markov_melody(mode_selected, markov_order);
     } else {
         alert("The button had a playing state that was neither on nor off!!");
