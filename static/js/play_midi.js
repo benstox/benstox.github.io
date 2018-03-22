@@ -342,7 +342,7 @@ $(document).ready(function() {
     }
 
     // print markov order
-    $("#print-markov-order").text(markov_order)
+    // $("#print-markov-order").text(markov_order)
 
     // prepare audio files
     _.forEach(notes, addAudioProperties);
