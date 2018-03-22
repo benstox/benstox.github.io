@@ -65,6 +65,7 @@ var clickButton = function(e) {
         // first turn off the ones already on
         var already_on = _.filter($("div.btn"), function(x) {if ($.data(x)["playing"] == "on") {return(x)}});
         _.forEach(already_on, function(playing_button) {
+            playing_button = $(playing_button);
             var playingButtonText = playing_button.text();
             playing_button.data("playing", "off");
             playing_button.text(playingButtonText.substring(0, 7));
