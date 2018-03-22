@@ -82,6 +82,8 @@ var setUpInstrument = function(instrument) {
             return(_.set(v, "source", "static/audio/" + instrument + "/" + v.name + ".mp3"));
         }
     );
+    // prepare audio files
+    _.forEach(notes, addAudioProperties);
     return(notes);
 };
 
@@ -368,9 +370,6 @@ $(document).ready(function() {
 
     // print markov order
     // $("#print-markov-order").text(markov_order)
-
-    // prepare audio files
-    _.forEach(notes, addAudioProperties);
 
     $("button.play-button").click(clickPlayButton);
     $("#instrument button").click(
