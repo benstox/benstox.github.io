@@ -50,14 +50,14 @@ var NOTES = {
 // user interaction --------------------------------------------------------------
 var turnButtonOff = function(button) {
     button.data("pressed", "up");
-    button.text("&#9658;"); // play symbol (triangle)
+    button.text("►"); // play symbol (triangle)
     button.removeClass("btn-light");
     button.addClass("btn-dark");
 };
 
 var turnButtonOn = function(button) {
     button.data("pressed", "down");
-    button.text("&#9608;"); // stop symbol (square)
+    button.text("█"); // stop symbol (square)
     button.removeClass("btn-dark");
     button.addClass("btn-light");
 };
@@ -111,13 +111,12 @@ var clickPlayButton = function(e) {
         var processed_melodies = load_melody_data(MODES[mode_selected], markov_order);
         play_markov_melody(processed_melodies);
     } else {
-        alert("The button had a playing state that was neither down nor up!!");
+        alert("The button had a playing state that was neither up nor down!!");
     };
 };
 
-var clickRadioButton = function(settingType) {
+var clickRadioButton = function(button, settingType) {
     // click a settings radio button, e.g. for an instrument or Markov order
-    var button = $(this);
     var pressed = button.data("pressed");
     if (pressed == "down") {
         turnButtonOff(button);
@@ -131,7 +130,7 @@ var clickRadioButton = function(settingType) {
         // then turn this one on
         turnButtonOn(button);
     } else {
-        alert("The button had a state that was neither down nor up!!");
+        alert("The button had a state that was neither up nor down!!");
     };
 };
 
@@ -371,9 +370,15 @@ $(document).ready(function() {
 
     $("button.play-button").click(clickPlayButton);
     $("#instrument button").click(
-        function() {clickRadioButton("#instrument")}
+        function() {
+            var button = $(this);
+            clickRadioButton(button, "instrument");
+        }
     );
     $("#markov-order button").click(
-        function() {clickRadioButton("#markov-order")}
+        function() {
+            var button = $(this);
+            clickRadioButton(button, "order");
+        }
     );
 });
