@@ -376,7 +376,7 @@ $(document).ready(function() {
             clickRadioButton(button, "instrument");
         }
     );
-    $("#markov-order button").click(
+    $("#order button").click(
         function() {
             var button = $(this);
             clickRadioButton(button, "order");
