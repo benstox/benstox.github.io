@@ -50,14 +50,12 @@ var NOTES = {
 // user interaction --------------------------------------------------------------
 var turnButtonOff = function(button) {
     button.data("pressed", "up");
-    button.text("►"); // play symbol (triangle)
     button.removeClass("btn-light");
     button.addClass("btn-dark");
 };
 
 var turnButtonOn = function(button) {
     button.data("pressed", "down");
-    button.text("█"); // stop symbol (square)
     button.removeClass("btn-dark");
     button.addClass("btn-light");
 };
@@ -92,6 +90,7 @@ var clickPlayButton = function(e) {
     var buttonText = button.text();
     if (pressed == "down") {
         turnButtonOff(button);
+        button.text("►"); // play symbol (triangle)
         stop_music();
     } else if (pressed == "up") {
         // first turn off the ones already on
@@ -99,10 +98,12 @@ var clickPlayButton = function(e) {
         _.forEach(alreadyPressed, function(playingButton) {
             playingButton = $(playingButton);
             turnButtonOff(playingButton);
+            button.text("►"); // play symbol (triangle)
         });
         stop_music();
         // then play this button
         turnButtonOn(button);
+        button.text("█"); // stop symbol (square)
         var instrument = getSetting("instrument");
         setUpInstrument(instrument);
         var mode_selected = button.data("mode");
