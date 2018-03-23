@@ -49,15 +49,35 @@ var NOTES = {
 
 // user interaction --------------------------------------------------------------
 var turnButtonOff = function(button) {
+    // change button colour to dark and "pressed" setting to "up"
     button.data("pressed", "up");
     button.removeClass("btn-light");
     button.addClass("btn-dark");
 };
 
 var turnButtonOn = function(button) {
+    // change button colour to light and "pressed" setting to "down"
     button.data("pressed", "down");
     button.removeClass("btn-dark");
     button.addClass("btn-light");
+};
+
+var getPlayingButtons = function() {
+    // find and return any of the play buttons that are pressed down
+    var playingButtons = _.filter($("button.play-button"), function(x) {if ($.data(x)["pressed"] == "down") {return(x)}});
+    return(playingButtons);
+};
+
+var playThisButtonsMusic = function(button) {
+    // get the mode, instrument and Markov order settings
+    // and play some music!
+    var instrument = getSetting("instrument");
+    setUpInstrument(instrument);
+    var mode_selected = button.data("mode");
+    var markov_order = getSetting("order");
+    console.log("Mode: " + mode_selected + "; Order: " + markov_order);
+    var processed_melodies = load_melody_data(MODES[mode_selected], markov_order);
+    play_markov_melody(processed_melodies);
 };
 
 var getSetting = function(settingType) {
@@ -85,6 +105,8 @@ var setUpInstrument = function(instrument) {
 };
 
 var clickPlayButton = function(e) {
+    // everything that happens when you click one of the play buttons
+    // (buttons with the mode data)
     var button = $(this);
     var pressed = button.data("pressed");
     var buttonText = button.text();
@@ -94,23 +116,17 @@ var clickPlayButton = function(e) {
         stop_music();
     } else if (pressed == "up") {
         // first turn off the ones already on
-        var alreadyPressed = _.filter($("button.play-button"), function(x) {if ($.data(x)["pressed"] == "down") {return(x)}});
+        var alreadyPressed = getPlayingButtons();
         _.forEach(alreadyPressed, function(playingButton) {
             playingButton = $(playingButton);
             turnButtonOff(playingButton);
-            button.text("►"); // play symbol (triangle)
+            playingButton.text("►"); // play symbol (triangle)
         });
         stop_music();
         // then play this button
         turnButtonOn(button);
         button.text("█"); // stop symbol (square)
-        var instrument = getSetting("instrument");
-        setUpInstrument(instrument);
-        var mode_selected = button.data("mode");
-        var markov_order = getSetting("order");
-        console.log("Mode: " + mode_selected + "; Order: " + markov_order);
-        var processed_melodies = load_melody_data(MODES[mode_selected], markov_order);
-        play_markov_melody(processed_melodies);
+        playThisButtonsMusic(button);
     } else {
         alert("The button had a playing state that was neither up nor down!!");
     };
@@ -128,6 +144,13 @@ var clickRadioButton = function(button, settingType) {
             pressedButton = $(pressedButton);
             turnButtonOff(pressedButton);
         });
+        // stop and then start the music with the new settings if it is playing
+        var playingButtons = getPlayingButtons();
+        if (playingButtons.length > 0) {
+            stop_music();
+            var playingButton = $(playingButtons[0]);
+            playThisButtonsMusic(playingButton);
+        };
         // then turn this one on
         turnButtonOn(button);
     } else {
