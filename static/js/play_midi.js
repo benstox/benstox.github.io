@@ -1,4 +1,5 @@
 // https://www.keithmcmillen.com/blog/making-music-in-the-browser-web-midi-api/
+// got instruments from http://www.caseyrule.com/projects/midi/soundfonts/FluidR3_GM/
 
 // variables from the tutorial
 var log = console.log.bind(console);
@@ -9,8 +10,6 @@ var midi;
 var AudioContext = AudioContext || webkitAudioContext; // for ios/safari
 var context = new AudioContext();
 var activeNotes = [];
-var btnBox = $('#content');
-var btn = $('.button');
 var data;
 var cmd;
 var channel;
@@ -144,6 +143,8 @@ var clickRadioButton = function(button, settingType) {
             pressedButton = $(pressedButton);
             turnButtonOff(pressedButton);
         });
+        // then turn this one on
+        turnButtonOn(button);
         // stop and then start the music with the new settings if it is playing
         var playingButtons = getPlayingButtons();
         if (playingButtons.length > 0) {
@@ -151,8 +152,6 @@ var clickRadioButton = function(button, settingType) {
             var playingButton = $(playingButtons[0]);
             playThisButtonsMusic(playingButton);
         };
-        // then turn this one on
-        turnButtonOn(button);
     } else {
         alert("The button had a state that was neither up nor down!!");
     };
